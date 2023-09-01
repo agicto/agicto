@@ -24,7 +24,7 @@ response = openai.ChatCompletion.create(
 )
 
 response
-
+print(response)
 
 # example with a system message
 response = openai.ChatCompletion.create(
@@ -36,7 +36,7 @@ response = openai.ChatCompletion.create(
     temperature=0,
 )
 
-#print(response['choices'][0]['message']['content'])
+print(response['choices'][0]['message']['content'])
 
 # An example of a system message that primes the assistant to explain concepts in great depth
 response = openai.ChatCompletion.create(
@@ -48,7 +48,7 @@ response = openai.ChatCompletion.create(
     temperature=0,
 )
 
-#print(response["choices"][0]["message"]["content"])
+print(response["choices"][0]["message"]["content"])
 # An example of a system message that primes the assistant to give brief, to-the-point answers
 response = openai.ChatCompletion.create(
     model=MODEL,
@@ -59,7 +59,7 @@ response = openai.ChatCompletion.create(
     temperature=0,
 )
 
-#print(response["choices"][0]["message"]["content"])
+print(response["choices"][0]["message"]["content"])
 
 # The business jargon translation example, but with example names for the example messages
 response = openai.ChatCompletion.create(
@@ -75,7 +75,7 @@ response = openai.ChatCompletion.create(
     temperature=0,
 )
 
-#print(response["choices"][0]["message"]["content"])
+print(response["choices"][0]["message"]["content"])
 
 def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0613"):
     """Return the number of tokens used by a list of messages."""
@@ -94,7 +94,7 @@ def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0613"):
         }:
         tokens_per_message = 3
         tokens_per_name = 1
-    elif model == "gpt-3.5-turbo-0301":
+    elif model == "gpt-3.5-turbo-0613":
         tokens_per_message = 4  # every message follows <|start|>{role/name}\n{content}<|end|>\n
         tokens_per_name = -1  # if there's a name, the role is omitted
     elif "gpt-3.5-turbo" in model:
@@ -116,6 +116,7 @@ def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0613"):
                 num_tokens += tokens_per_name
     num_tokens += 3  # every reply is primed with <|start|>assistant<|message|>
     return num_tokens
+
 import openai
 
 example_messages = [
@@ -150,7 +151,6 @@ example_messages = [
 ]
 
 for model in [
-    "gpt-3.5-turbo-0301",
     "gpt-3.5-turbo-0613",
     "gpt-3.5-turbo",
     "gpt-4-0314",
