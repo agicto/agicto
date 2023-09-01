@@ -1,16 +1,21 @@
-#如何格式化 ChatGPT 模型的输入
+# 如何格式化 ChatGPT 模型的输入
 
 ChatGPT由OpenAI gpt-4 最先进的模型提供支持 gpt-3.5-turbo 。
 您可以使用或使用 gpt-4 OpenAI API 构建 gpt-3.5-turbo 自己的应用程序。
 聊天模型将一系列消息作为输入，并返回 AI 编写的消息作为输出。
 本指南通过几个示例 API 调用来说明聊天格式。
 
-##1. 导入 openai 库
-**# if needed, install and/or upgrade to the latest version of the OpenAI Python library
-%pip install --upgrade openai**
-**# import the OpenAI Python library for calling the OpenAI API
-import openai**
-##2. 聊天 API 调用示例
+## 1. 导入 openai 库
+```
+# if needed, install and/or upgrade to the latest version of the OpenAI Python library
+%pip install --upgrade openai 
+``` 
+
+```
+# import the OpenAI Python library for calling the OpenAI API
+import openai
+``` 
+## 2. 聊天 API 调用示例
 
 聊天 API 调用有两个必需的输入：
 model ：要使用的模型的名称（例如、 gpt-3.5-turbo gpt-4 gpt-3.5-turbo-0613 gpt-3.5-turbo-16k-0613 ）
@@ -23,7 +28,8 @@ content ：消息的内容（例如， Write me a beautiful poem ）
 
 让我们看一个聊天 API 调用示例，以了解聊天格式在实践中是如何工作的。
 
-**# Example OpenAI Python library request
+```
+# Example OpenAI Python library request
 MODEL = "gpt-3.5-turbo"
 response = openai.ChatCompletion.create(
     model=MODEL,
@@ -36,7 +42,9 @@ response = openai.ChatCompletion.create(
     temperature=0,
 )
 
-response**
+response
+print（response）
+```  
 
 <OpenAIObject chat.completion id=chatcmpl-7UkgnSDzlevZxiy0YjZcLYdUMz5yZ at 0x118e394f0> JSON: {
   "id": "chatcmpl-7UkgnSDzlevZxiy0YjZcLYdUMz5yZ",
@@ -73,7 +81,9 @@ index ：选项列表中的完成索引
 
 仅提取回复：
 
-**response['choices'][0]['message']['content']**
+```
+print（response['choices'][0]['message']['content']）
+``` 
 
 'Orange who?'
 
@@ -81,7 +91,8 @@ index ：选项列表中的完成索引
 
 例如，要要求模型以海盗黑胡子的风格解释异步编程，我们可以按如下方式构建对话：
 
-**# example with a system message
+```
+# example with a system message
 response = openai.ChatCompletion.create(
     model=MODEL,
     messages=[
@@ -91,9 +102,11 @@ response = openai.ChatCompletion.create(
     temperature=0,
 )
 
-print(response['choices'][0]['message']['content'])**
+print(response['choices'][0]['message']['content'])
+```  
 
-**# example without a system message
+```
+# example without a system message
 response = openai.ChatCompletion.create(
     model=MODEL,
     messages=[
@@ -102,18 +115,20 @@ response = openai.ChatCompletion.create(
     temperature=0,
 )
 
-print(response['choices'][0]['message']['content'])**
+print(response['choices'][0]['message']['content'])
+``` 
 
-##3. 指导 gpt-3.5-涡轮-0301 的提示
+## 3. 指导 gpt-3.5-涡轮-0301 的提示
 
 指导模型的最佳做法可能会因模型版本而异。以下建议适用于 gpt-3.5-turbo-0301 也可能不适用于未来的模型。
 
-###System messages 系统消息
+### System messages 系统消息
 
 系统消息可用于为助手准备不同的个性或行为。
 请注意， gpt-3.5-turbo-0301 通常不会像 或 那样 gpt-4-0314 gpt-3.5-turbo-0613 关注系统消息。因此，对于 gpt-3.5-turbo-0301 ，我们建议改为在用户消息中放置重要说明。一些开发人员发现，在对话接近结束时不断移动系统消息，以防止模型的注意力随着对话时间的延长而转移。
 
-**# An example of a system message that primes the assistant to explain concepts in great depth
+```
+# An example of a system message that primes the assistant to explain concepts in great depth
 response = openai.ChatCompletion.create(
     model=MODEL,
     messages=[
@@ -123,14 +138,16 @@ response = openai.ChatCompletion.create(
     temperature=0,
 )
 
-print(response["choices"][0]["message"]["content"])**
+print(response["choices"][0]["message"]["content"])
+``` 
 
-###Few-shot prompting 少数镜头提示
+### Few-shot prompting 少数镜头提示
 在某些情况下，向模型展示您想要的内容比告诉模型您想要什么更容易。
 向模型显示所需内容的一种方法是使用伪造的示例消息。
 
 例如：
-**# An example of a faked few-shot conversation to prime the model into translating business jargon to simpler speech
+```
+# An example of a faked few-shot conversation to prime the model into translating business jargon to simpler speech
 response = openai.ChatCompletion.create(
     model=MODEL,
     messages=[
@@ -146,13 +163,15 @@ response = openai.ChatCompletion.create(
     temperature=0,
 )
 
-print(response["choices"][0]["message"]["content"])**
+print(response["choices"][0]["message"]["content"])
+```
 
 为了帮助阐明示例消息不是实际对话的一部分，并且不应由模型引用，您可以尝试将消息 name 字段 system 设置为 example_user 和 example_assistant 。
 
 转换上面的几个镜头示例，我们可以这样写：
 
-**# The business jargon translation example, but with example names for the example messages
+```
+# The business jargon translation example, but with example names for the example messages
 response = openai.ChatCompletion.create(
     model=MODEL,
     messages=[
@@ -166,14 +185,15 @@ response = openai.ChatCompletion.create(
     temperature=0,
 )
 
-print(response["choices"][0]["message"]["content"])**
+print(response["choices"][0]["message"]["content"]) 
+```
 
 并非每次工程对话的尝试一开始都会成功。
 如果你的第一次尝试失败了，不要害怕尝试不同的方法来启动或调节模型。
 例如，一位开发人员发现，当他们插入一条用户消息时，准确性有所提高，该消息说“到目前为止做得好，这些已经很完美”，以帮助模型提供更高质量的响应。
 有关如何提高模型可靠性的更多想法，请考虑阅读我们关于提高可靠性的技术指南。它是为非聊天模型编写的，但它的许多原则仍然适用。
 
-###4. 计算代币
+### 4. 计算代币
 
 提交请求时，API 会将消息转换为一系列令牌。
 
@@ -186,7 +206,8 @@ print(response["choices"][0]["message"]["content"])**
 请注意，从消息中计算令牌的确切方式可能会因模型而异。考虑以下函数的计数，而不是永恒的保证。
 特别是，使用可选函数输入的请求将在下面计算的估计值之上消耗额外的令牌。
 
-**import tiktoken
+```
+import tiktoken
 
 
 def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0613"):
@@ -227,9 +248,11 @@ def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0613"):
             if key == "name":
                 num_tokens += tokens_per_name
     num_tokens += 3  # every reply is primed with <|start|>assistant<|message|>
-    return num_tokens**
+    return num_tokens
+```
 
-    **# let's verify the function above matches the OpenAI API response
+```
+# let's verify the function above matches the OpenAI API response
 
 import openai
 
@@ -283,4 +306,5 @@ for model in [
         max_tokens=1,  # we're only counting input tokens here, so let's not waste tokens on the output
     )
     print(f'{response["usage"]["prompt_tokens"]} prompt tokens counted by the OpenAI API.')
-    print()**
+    print()
+```
